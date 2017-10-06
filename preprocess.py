@@ -9,7 +9,7 @@ os.chdir("data")
 
 def resizeImage(imagePath, folder):
     im = Image.open(os.getcwd() + os.sep +imagePath).convert('RGB')
-    im = ImageOps.fit(im, (100, 100), Image.ANTIALIAS, (0.5, 0.5))
+    im = ImageOps.fit(im, (200, 200), Image.ANTIALIAS, (0.5, 0.5))
     #im = ImageOps.grayscale(im)
     im.save(savePath + os.sep + folder + os.sep + imagePath)
 
@@ -18,7 +18,10 @@ for folder in os.listdir(initialPath):
     if folder.startswith("."):
         continue
     os.chdir(folder)
-    os.makedirs(savePath + os.sep + folder)
+    try:
+        os.makedirs(savePath + os.sep + folder)
+    except:
+        pass    
     for img in os.listdir(os.getcwd()):
         if img.startswith("."):
             continue
