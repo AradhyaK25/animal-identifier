@@ -1,40 +1,21 @@
-import os, numpy
-from scipy.misc import imread
+from sklearn.decomposition import PCA
+import animal_as_array
+        
 
-ANIMAL_PROCESSED_PATH = os.getcwd() + os.sep + "data_preprocess"
+def pca(X_train,X_test):
+    n_components = 15 
 
-def get_animals():
 
-    # Read animal names, paths.
-    animal_names, animal_paths = [], []
-    for animal_name in sorted(os.listdir(ANIMAL_PROCESSED_PATH)):
-        folder = ANIMAL_PROCESSED_PATH + os.sep + animal_name
-        if not os.path.isdir(folder):
-            continue
-        paths = [os.path.join(folder, f) for f in os.listdir(folder) if f != '.DS_Store']
-        n_images = len(paths)
-        animal_names.extend([animal_name] * n_images)
-        animal_paths.extend(paths)
+    pca = PCA(n_components=n_components, whiten=True).fit(X_train)
+    eigenanimals = pca.components_.reshape((n_components, 100, 100))
 
-    n_animal = len(animal_paths)
-    target_names = numpy.unique(animal_names)
-    target = numpy.searchsorted(target_names, animal_names)
 
-    # Read image data.
-    animals = numpy.zeros((n_animal, 100, 100, 3), dtype=numpy.float32)
-    for i, animal_path in enumerate(animal_paths):
-        img = imread(animal_path)
-        animal = numpy.asarray(img, dtype=numpy.uint32)
-        animals[i, ...] = animal
+    print "Projecting the input data on the eigenpokemon orthonormal basis"
+    X_train_pca = pca.transform(X_train)
+    X_test_pca = pca.transform(X_test)
 
-    return {
-        'data': animals.reshape(len(animals), -1),
-        'images': animals,
-        'target': target,
-        'target_names': target_names,
-        'DESCR': 'Animals'
-    }
+    #print pca.explained_variance_ 
+    #print X_train_pca
+    return X_train_pca,X_test_pca
 
-retrieved_data = get_animals()
-print len(retrieved_data['data'])
-print len(retrieved_data['images'])
+#pca(animal_as_array.get_animals()['data'])
