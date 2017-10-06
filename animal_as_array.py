@@ -21,7 +21,7 @@ def get_animals():
     target = numpy.searchsorted(target_names, animal_names)
 
     # Read image data.
-    animals = numpy.zeros((n_animal, 100, 100, 3), dtype=numpy.float32)
+    animals = numpy.zeros((n_animal, 100, 100), dtype=numpy.float32)
     for i, animal_path in enumerate(animal_paths):
         img = imread(animal_path)
         animal = numpy.asarray(img, dtype=numpy.uint32)

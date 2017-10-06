@@ -30,14 +30,21 @@ for train_index, test_index in kf:
 
     X_train_pca,X_test_pca = pca.pca(X_train,X_test)
 
+    # print "Fitting the classifier to the training set"
+    # param_grid = {
+    #         'kernel': ['rbf', 'linear'],
+    #         'C': [1e3, 5e3, 1e4, 5e4, 1e5],
+    #         'gamma': [0.0001, 0.0005, 0.001, 0.005, 0.01, 0.1],
+    #     }
+    # clf = GridSearchCV(SVC(class_weight='balanced'), param_grid)
+    # print "here"
+    # clf = clf.fit(X_train_pca, Y_train)
+
     print "Fitting the classifier to the training set"
     param_grid = {
-            'kernel': ['rbf', 'linear'],
-            'C': [1e3, 5e3, 1e4, 5e4, 1e5],
-            'gamma': [0.0001, 0.0005, 0.001, 0.005, 0.01, 0.1],
-        }
-    clf = GridSearchCV(SVC(class_weight='balanced'), param_grid)
-    print "here"
+            'n_neighbors': list(xrange(1, 15)),
+    }
+    clf = GridSearchCV(KNeighborsClassifier(), param_grid)
     clf = clf.fit(X_train_pca, Y_train)
 
     print "Predicting pokemon names on the testing set"
