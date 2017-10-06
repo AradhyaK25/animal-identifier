@@ -1,15 +1,15 @@
 from sklearn.decomposition import PCA
 import animal_as_array
-        
+
 
 def pca(X_train,X_test):
-    
+
 
 
     #pca = PCA(n_components=None, whiten=True).fit(X_train)
-    
 
-    # print pca.explained_variance_ 
+
+    # print pca.explained_variance_
 
     # n_components=0
     # for i in pca.explained_variance_:
