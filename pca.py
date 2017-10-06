@@ -3,11 +3,11 @@ import animal_as_array
         
 
 def pca(X_train,X_test):
-    n_components = 15 
+    n_components = 20
 
 
     pca = PCA(n_components=n_components, whiten=True).fit(X_train)
-    eigenanimals = pca.components_.reshape((n_components, 100, 100))
+    eigenanimals = pca.components_.reshape((n_components, 100, 100,3))
 
 
     print "Projecting the input data on the eigenpokemon orthonormal basis"
