@@ -16,8 +16,8 @@ X = dataset['data']
 Y = dataset['target']
 X_test = X[:100]
 
-weight_svm = 0.518
-weight_knn = 0.482
+weight_svm = 0.2
+weight_knn = 0.8
 
 #print len(X),len(Y)
 
@@ -93,15 +93,16 @@ def predict(X_test):
     clf_1 = GridSearchCV(SVC(class_weight='balanced', probability=True), param_grid_1)
     #print "here"
     clf_1 = clf_1.fit(X_pca, Y)
+    print clf_1.best_estimator_
     Y_prob_1 = clf_1.predict_proba(X_test_pca)
     # print Y_prob_1
 
     # KNN Classifier
     print "Fitting the classifier to the training set"
-    param_grid_2 = {
-            'n_neighbors': list(xrange(1, 15)),
-    }
-    clf_2 = GridSearchCV(KNeighborsClassifier(), param_grid_2)
+    # param_grid_2 = {
+    #         'n_neighbors': list(xrange(1, 20)),
+    # }
+    clf_2 = KNeighborsClassifier(n_neighbors=5)
     clf_2 = clf_2.fit(X_pca, Y)
     Y_prob_2 = clf_2.predict_proba(X_test_pca)
     # print Y_prob_2
@@ -118,6 +119,8 @@ def predict(X_test):
     frequency_list = [0 for i in range(n_classes)]
     for ele in Y_pred:
         frequency_list[ele] += 1
+
+    print frequency_list
 
     max_frequency = max(frequency_list)
     predicted_class = []

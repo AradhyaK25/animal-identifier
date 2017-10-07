@@ -20,7 +20,7 @@ def pca(X_train,X_test):
 
     pca = PCA(n_components=n_components, whiten=True).fit(X_train)
 
-    eigenanimals = pca.components_.reshape((n_components, 200, 200,3))
+    eigenanimals = pca.components_.reshape((n_components, 300, 300,3))
     #print n_components
     print "Projecting the input data on the eigenpokemon orthonormal basis"
     X_train_pca = pca.transform(X_train)
