@@ -5,7 +5,7 @@ import numpy
 from PIL import Image, ImageOps, ImageFile
 from scipy.misc import imread
 
-video_path = "dolphin.mp4"
+video_path = "concat.mp4"
 
 video_process.record_frames(video_path)
 
@@ -34,5 +34,6 @@ animals = animals.reshape(len(animals), -1)
 
 X_test = animals
 
+os.chdir(working_dir)
 predicted_animals = classifier.predict(X_test)
 print predicted_animals

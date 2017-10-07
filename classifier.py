@@ -5,19 +5,22 @@ from sklearn.metrics import classification_report
 from sklearn.metrics import confusion_matrix
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.ensemble import VotingClassifier
-from sklearn import model_selection
+from sklearn import model_selection, datasets
 import pca
 import animal_as_array
 import numpy as np
-
+import os
+from sklearn.externals import joblib
 dataset = animal_as_array.get_animals()
 
 X = dataset['data']
 Y = dataset['target']
 X_test = X[:100]
 
-weight_svm = 0.2
-weight_knn = 0.8
+weight_svm = 0.518
+weight_knn = 0.482
+
+probability_threshold = 0.75
 
 #print len(X),len(Y)
 
@@ -79,31 +82,43 @@ print dataset['target_names']
 #     # results = model_selection.cross_val_score(ensemble, X, Y, cv=kf)
 #     # print "ensemble results:",results.mean()
 
+
+# X_test_dummy = X[:5]
+#
+# # Train the Classifier and save it to persistent storage.
+# X_pca, X_test__dummy_pca = pca.pca(X, X_test_dummy)
+#
+# # SVM Classifier
+# print "Fitting the classifier to the training set"
+# param_grid_1 = {
+#         'kernel': ['rbf', 'linear'],
+#         'C': [1e3, 5e3, 1e4, 5e4, 1e5],
+#         'gamma': [0.0001, 0.0005, 0.001, 0.005, 0.01, 0.1],
+#     }
+# clf_1 = GridSearchCV(SVC(class_weight='balanced', probability=True), param_grid_1)
+# #print "here"
+# clf_1 = clf_1.fit(X_pca, Y)
+# joblib.dump(clf_1, 'svm_trained.pkl')
+#
+# # KNN Classifier
+# print "Fitting the classifier to the training set"
+# param_grid_2 = {
+#         'n_neighbors': list(xrange(1, 15)),
+# }
+# clf_2 = GridSearchCV(KNeighborsClassifier(), param_grid_2)
+# clf_2 = clf_2.fit(X_pca, Y)
+# joblib.dump(clf_2, 'knn_trained.pkl')
+
 def predict(X_test):
 
     X_pca, X_test_pca = pca.pca(X, X_test)
 
-    # SVM Classifier
-    print "Fitting the classifier to the training set"
-    param_grid_1 = {
-            'kernel': ['rbf', 'linear'],
-            'C': [1e3, 5e3, 1e4, 5e4, 1e5],
-            'gamma': [0.0001, 0.0005, 0.001, 0.005, 0.01, 0.1],
-        }
-    clf_1 = GridSearchCV(SVC(class_weight='balanced', probability=True), param_grid_1)
-    #print "here"
-    clf_1 = clf_1.fit(X_pca, Y)
-    print clf_1.best_estimator_
+    print os.getcwd()
+    clf_1 = joblib.load('svm_trained.pkl')
     Y_prob_1 = clf_1.predict_proba(X_test_pca)
     # print Y_prob_1
 
-    # KNN Classifier
-    print "Fitting the classifier to the training set"
-    # param_grid_2 = {
-    #         'n_neighbors': list(xrange(1, 20)),
-    # }
-    clf_2 = KNeighborsClassifier(n_neighbors=5)
-    clf_2 = clf_2.fit(X_pca, Y)
+    clf_2 = joblib.load('knn_trained.pkl')
     Y_prob_2 = clf_2.predict_proba(X_test_pca)
     # print Y_prob_2
 
@@ -114,7 +129,8 @@ def predict(X_test):
 
     Y_pred = []
     for ele in Y_prob:
-        Y_pred.append(ele.index(max(ele)))
+        if ele.index(max(ele)) > probability_threshold:
+            Y_pred.append(ele.index(max(ele)))
 
     frequency_list = [0 for i in range(n_classes)]
     for ele in Y_pred:

@@ -1,8 +1,9 @@
 from sklearn.decomposition import PCA
 import animal_as_array
+from PIL import Image
 
 
-def pca(X_train,X_test):
+def pca(X_train, X_test):
 
 
 
@@ -22,12 +23,19 @@ def pca(X_train,X_test):
 
     eigenanimals = pca.components_.reshape((n_components, 300, 300,3))
     #print n_components
-    print "Projecting the input data on the eigenpokemon orthonormal basis"
+    print "Projecting the input data on the eigen animal orthonormal basis"
     X_train_pca = pca.transform(X_train)
+    print len(X_train_pca)
     X_test_pca = pca.transform(X_test)
 
+    # reconstruction = pca.inverse_transform(X_train_pca[98])
+    # im = Image.fromarray(reconstruction.reshape(300,300,3).astype('uint8'))
+    # im.show()
+    # im.save('eigen/tiger1.jpg')
+
     #print X_train_pca
-    return X_train_pca,X_test_pca
+    return X_train_pca, X_test_pca
 
 #print "here"
-#pca(animal_as_array.get_animals()['data'])
+# data = animal_as_array.get_animals()['data']
+# pca(data)

@@ -27,9 +27,9 @@ def get_animals():
         animal = numpy.asarray(img, dtype=numpy.uint32)
         animals[i, ...] = animal
 
-    indices = numpy.arange(n_animal)
-    numpy.random.RandomState(42).shuffle(indices)
-    animals, target = animals[indices], target[indices]
+    # indices = numpy.arange(n_animal)
+    # numpy.random.RandomState(42).shuffle(indices)
+    # animals, target = animals[indices], target[indices]
 
     return {
         'data': animals.reshape(len(animals), -1),
