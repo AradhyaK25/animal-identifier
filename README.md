@@ -58,7 +58,7 @@ An application that is immediately obvious is identification of animals in the w
 
 1) Increasing the number of animal classes to enhance utility
 
-2)Increasing the number of training data points, to improve classification accuracy, and to allow recording of more frames from input video
+2) Increasing the number of training data points, to improve classification accuracy, and to allow recording of more frames from input video
 
 3) Incorporating an additional classifier on the basis of the sound the animal makes. This classifier can be weighted with the video classifier to improve results.
 
